@@ -112,8 +112,19 @@ generate_next_passport_id <- function() {
 # LOAD MODULES
 # ------------------------------------------------------------------------------
 cat("DEBUG app_dir =", app_dir, "\n")
-module_files <- list.files(file.path(app_dir, "modules"), pattern = "\\.R$", full.names = TRUE)
+module_files <- list.files(
+  app_dir,
+  pattern = "^mod_.*\\.R$",
+  full.names = TRUE
+)
+
 cat("DEBUG modules found =", length(module_files), "\n")
+
 for (f in module_files) {
-  tryCatch(source(f), error = function(e) cat("ERROR in", f, ":", conditionMessage(e), "\n"))
+  tryCatch(
+    source(f),
+    error = function(e) {
+      cat("ERROR in", f, ":", conditionMessage(e), "\n")
+    }
+  )
 }

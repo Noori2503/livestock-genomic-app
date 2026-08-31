@@ -702,10 +702,8 @@ mod_login_server <- function(id, log_activity = function(...) invisible(NULL)) {
 
       tryCatch(
         log_activity(
-          user_id = auth$user_id,
-          action = "LOGIN",
-          details = paste0("Successful login; role=", auth$role)
-        ),
+  paste0("Successful login; role=", auth$role)
+),
         error = function(e) {
           message("Activity log error: ", conditionMessage(e))
         }

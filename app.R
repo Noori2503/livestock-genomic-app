@@ -60,11 +60,18 @@ ui <- tagList(
     ),
 
     nav_panel(
-      title = "Analytics & Reports",
+      title = "Analytics",
       value = "analytics_tab",
       icon = bs_icon("bar-chart-line-fill"),
       mod_analytics_ui("analytics")
     ),
+
+    nav_panel(
+  title = "Reports",
+  value = "reports_tab",
+  icon = bs_icon("file-earmark-text-fill"),
+  mod_reports_ui("reports_1")
+),
 
     nav_panel(
   title = "EBV / GEBV",
@@ -88,7 +95,7 @@ ui <- tagList(
 
 server <- function(input, output, session) {
 
-  onStop(function() { poolClose(db_pool) })
+  # (onStop line removed from here)
 
   # ---- Shared reactives used by more than one module -----------------------
   refresh_trigger <- reactiveVal(0)
@@ -187,6 +194,11 @@ server <- function(input, output, session) {
 
   mod_analytics_server("analytics", records_data = records_data)
 
+  mod_reports_server(
+  "reports_1",
+  records_data = records_data
+)
+
   mod_ebv_gebv_server("ebv_gebv",
                      records_data = records_data,
                      auth = auth,
@@ -199,4 +211,8 @@ server <- function(input, output, session) {
 # ------------------------------------------------------------------------------
 # 3. RUN APPLICATION
 # ------------------------------------------------------------------------------
+onStop(function() {
+  poolClose(db_pool)
+})
+
 shinyApp(ui = ui, server = server)
